@@ -1,0 +1,24 @@
+input {
+        tcp {
+            codec => json
+            port => 65040
+            tcp_keep_alive => true
+        }
+}
+
+filter {
+        mutate {
+                add_field => { "event_source" => "jumpcloud"  }
+                remove_field => ["[host]","[port]"]
+        }
+}
+
+
+
+output{
+        kafka{
+                bootstrap_servers => "kafka:9092"
+                topic_id => "ace-jc"
+                codec => "json"
+                }
+        }
